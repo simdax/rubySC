@@ -1,6 +1,29 @@
 = rubySC
 
-Description goes here.
+1. Créez une instance de Musique :
+
+ ` mu=Musique.instance `
+
+1. ajouter une nouvelle voix :
+
+ ` mu.set :nomVoix (ou "nomVoix"), :param => valeur `
+
+1. il y a 6 paramètres pouvant être réglés :
+    
+  * instrument : pour l'instant, seulement deux ("sax" ou "default") !!
+  * dur : les rythmes de votre mélodie
+  * degree : les notes de votre mélodie
+  * amp : le volume de la mélodie
+  * octave : le registre dans lequel se situe votre voix
+  * scale : l'echelle utilisé pour votre mélodie
+
+1. arrêter ou reprenez vos voix : 
+   
+   ` mu.stop :voixUn, :voixDeux ## arrête deux voix
+   ` mu.play :voixUn ## reprend voixUn
+   ` mu.stop :all  ## arrête tout
+
+1. Des bêtes de méta-fonctions sont à prévoir. 
 
 == Contributing to rubySC
  
