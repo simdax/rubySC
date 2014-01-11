@@ -17,11 +17,14 @@ Jeweler::Tasks.new do |gem|
   gem.name = "rubySC"
   gem.homepage = "http://github.com/simdax/rubySC"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{simple and light music livecoding library}
+  gem.description = %Q{Petite bibliotheque permettant une communication simple entre SuperCollider/JITlib et Ruby. Se concentre avant tout sur les capacités logiques de création de mélodies plus que sur la génération de son. Nécessite d'installer supercollider sur l'ordinateur (=> sudo aptitude install supercollider sur debian par exemple)"}
   gem.email = "simoncornaz@gmail.com"
   gem.authors = ["simdax"]
   # dependencies defined in Gemfile
+  gem.add_dependency 'osc-ruby'
+  gem.files = Dir.glob('lib/*')
+
 end
 Jeweler::RubygemsDotOrgTasks.new
 
@@ -32,13 +35,6 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-require 'rcov/rcovtask'
-Rcov::RcovTask.new do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
-  test.rcov_opts << '--exclude "gems/*"'
-end
 
 task :default => :test
 
@@ -51,3 +47,4 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
