@@ -22,7 +22,7 @@ Jeweler::Tasks.new do |gem|
   gem.email = "simoncornaz@gmail.com"
   gem.authors = ["simdax"]
   # dependencies defined in Gemfile
-  gem.add_dependency 'osc-ruby'
+  gem.add_dependency 'osc-ruby', '>=0'
   gem.files = Dir.glob('lib/*')
 
 end
