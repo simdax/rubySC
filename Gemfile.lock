@@ -53,7 +53,6 @@ GEM
       multi_json (~> 1.0)
       multi_xml (~> 0.5)
       rack (~> 1.2)
-    osc-ruby (1.1.0)
     rack (1.5.2)
     rake (10.1.1)
     rdoc (3.12.2)
@@ -79,7 +78,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.0)
   jeweler (~> 2.0.0)
-  osc-ruby
   rdoc (~> 3.12)
   shoulda
   simplecov
