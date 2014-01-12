@@ -1,42 +1,47 @@
 = rubySC
 
-1. Créez une instance de Musique :
+* Créez une instance de Musique :
 
- ` mu=Musique.instance `
+ mu=Musique.instance
 
-1. ajouter une nouvelle voix :
+* ajouter une nouvelle voix :
 
- ` mu.set :nomVoix (ou "nomVoix"), :param => valeur `
+ mu.set :nomVoix (ou "nomVoix"), :param => valeur
 
-1. il y a 6 paramètres pouvant être réglés :
+* soyez heureux
+* il y a 6 paramètres pouvant être réglés :
     
-  * instrument : pour l'instant, seulement deux ("sax" ou "default") !!
+  * instrument : regardez les noms des synthdef dans "init.sc" (ils proviennent tous de recherches sur SCcode
   * dur : les rythmes de votre mélodie
   * degree : les notes de votre mélodie
   * amp : le volume de la mélodie
   * octave : le registre dans lequel se situe votre voix
   * scale : l'echelle utilisé pour votre mélodie
 
-1. arrêter ou reprenez vos voix : 
+* arrêter ou reprenez vos voix : 
    
-   ` mu.stop :voixUn, :voixDeux ## arrête deux voix
-   ` mu.play :voixUn ## reprend voixUn
-   ` mu.stop :all  ## arrête tout
+   * mu.stop :voixUn, :voixDeux ## arrête deux voix
+   * mu.play :voixUn ## reprend voixUn
+   * mu.stop :all  ## arrête tout
 
-1. Des bêtes de méta-fonctions sont à prévoir. 
+* Des bêtes de méta-fonctions sont à prévoir.  
 
-== Contributing to rubySC
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
-* Fork the project.
-* Start a feature/bugfix branch.
-* Commit and push until you are happy with your contribution.
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+* Vous pouvez essayer de rajouter des instruments dans "init.sc", ou
+bien en apprenant SuperCollider, ou bien en cherchant par vous-mêmes
+des plugins sur le net
 
-== Copyright
+== TODO
 
-Copyright (c) 2014 simdax. See LICENSE.txt for
-further details.
+Pleins de trucs, mais notamment et surtout créer un lien propre avec
+SuperCollider, je ne sais pas vraiment comment faire un beau linkage
+tout propre entre des programmes.
+
+ ==
+* Copyright
+
+Copyright (c) 2014 simdax.
+
+Copiez-le comme des gros gorets, qu'un truc un peu simple un jour
+surgisse de ce monde de fous de MAOistes qui veulent détruire le monde
+à force de complexitudinités...
 

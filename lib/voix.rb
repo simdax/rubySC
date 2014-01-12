@@ -1,26 +1,33 @@
 # -*- coding: utf-8 -*-
-# sorte de classe privée un peu inutile pour garder en mémoire
+# sorte de classe privée pour garder en mémoire
 # ce qui se passe dans les 'voix'...
 
 class Voix
   
   def initialize options={}
    
+    @dur=options[:dur]
+    @degree=options[:degree]
+    @octave=options[:octave]
+
+
     if options[:scale].nil?
       then @scale = "major"
     else @scale=options[:scale]
     end
-    @dur=options[:dur]
-    @degree=options[:degree]
-    @octave=options[:octave]
-    @amp=options[:amp]
+
+    if options[:amp].nil?
+      then @amp = Pwhite(0.2,0.5)
+    else @amp=options[:amp]
+    end
+
     if options[:instrument].nil?
       then @instrument = "default"
     else @instrument=options[:instrument].to_s
     end
+
   end
   
-  # permet de set plein d'options à la fois, ce qui est plutôt cool
   def set options
     options.each do |key, value|
       if value.is_a? Symbol

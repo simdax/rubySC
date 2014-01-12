@@ -130,14 +130,14 @@ class Musique
   
   ### fonction Live Coding
   
+  ## si on est perdu dans ses voix...
   def list
     @listeVoix.each do |k, v|
       puts "#{k} : #{v.inspect}"
     end
   end
 
-
-  # fonctions de très haut niveau
+  # fonctions de plus haut niveau
 
   def echelle echelle
     @listeVoix.each_key do |voix|
