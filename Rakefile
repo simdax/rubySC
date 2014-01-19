@@ -23,6 +23,7 @@ Jeweler::Tasks.new do |gem|
   gem.authors = ["simdax"]
   # dependencies defined in Gemfile
   gem.add_dependency 'osc-ruby', '>=0'
+gem.add_dependency 'active_support', '>=0'
   gem.files = Dir.glob('lib/*')
 
 end

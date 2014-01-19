@@ -3,13 +3,15 @@
 # ce qui se passe dans les 'voix'...
 
 class Voix
+
+  attr_reader :dur, :degree, :octave, :root, :scale, :amp, :instrument
   
   def initialize options={}
    
     @dur=options[:dur]
     @degree=options[:degree]
     @octave=options[:octave]
-
+    @root=options[:root]
 
     if options[:scale].nil?
       then @scale = "major"
@@ -17,7 +19,7 @@ class Voix
     end
 
     if options[:amp].nil?
-      then @amp = Pwhite(0.2,0.5)
+      then @amp = "Pwhite(0.2,0.5)"
     else @amp=options[:amp]
     end
 
