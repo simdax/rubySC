@@ -17,13 +17,9 @@ Gem::Specification.new do |s|
     "README.md"
   ]
   s.files = [
-    "lib/#voix.rb#",
     "lib/init.sc",
-    "lib/logSC",
     "lib/musique.rb",
     "lib/rubySC.rb",
-    "lib/superCollider.rb",
-    "lib/test.yaml",
     "lib/voix.rb"
   ]
   s.homepage = "http://github.com/simdax/rubySC"
