@@ -9,6 +9,8 @@ load 'lib/circularList.rb'
 
 module Partition
 
+  def self.importer JSON
+
   def self.echelle echelle
     SC.listeVoix.each_key do |voix|
       SC.set ({:scale => echelle}), voix
