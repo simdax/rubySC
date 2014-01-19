@@ -12,7 +12,7 @@ include ObjectSpace
 
 $:.unshift( File.join( File.dirname( __FILE__), '..', 'lib' ) )
 
-require 'lib/voix'
+require 'lib/voix.rb'
 require 'lib/musique.rb'
 
 ## classe principale, singleton
