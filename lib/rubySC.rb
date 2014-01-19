@@ -1,16 +1,19 @@
 #! /usr/bin/ruby
 # -*- coding: utf-8 -*-
 
-load "#{File.join(File.dirname(__FILE__), "voix.rb")}"
-load "#{File.join(File.dirname(__FILE__), "musique.rb")}"
+#load "#{File.join(File.dirname(__FILE__), "voix.rb")}"
+#load "#{File.join(File.dirname(__FILE__), "musique.rb")}"
+
 
 require 'active_support'
 require 'osc-ruby'
-#require 'osc-ruby/em_server'
 require 'singleton'
 include ObjectSpace
 
+$:.unshift( File.join( File.dirname( __FILE__), '..', 'lib' ) )
 
+require 'lib/voix'
+require 'lib/musique.rb'
 
 ## classe principale, singleton
 #
@@ -22,6 +25,8 @@ include ObjectSpace
 class SC
 
   cattr_reader :listeVoix
+  
+  include Singleton
   include Partition, Marche
 
   # ouvre le contact avec SuperCollider

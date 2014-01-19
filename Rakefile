@@ -21,9 +21,10 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Petite bibliotheque permettant une communication simple entre SuperCollider/JITlib et Ruby. Se concentre avant tout sur les capacités logiques de création de mélodies plus que sur la génération de son. Nécessite d'installer supercollider sur l'ordinateur (=> sudo aptitude install supercollider sur debian par exemple)"}
   gem.email = "simoncornaz@gmail.com"
   gem.authors = ["simdax"]
+
   # dependencies defined in Gemfile
   gem.add_dependency 'osc-ruby', '>=0'
-gem.add_dependency 'active_support', '>=0'
+  gem.add_dependency 'active_support', '>=0'
   gem.files = Dir.glob('lib/*')
 
 end
