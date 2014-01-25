@@ -100,7 +100,8 @@ class SC
   
   public
   
-  def self.set options={}, *voix
+  def self.set options=nil, *voix
+
     if voix.nil?
       begin
         raise ArgumentError
@@ -108,6 +109,15 @@ class SC
         puts "vous devez donner un nom à votre (vos) voix"
       end
     end
+
+    if @@listeVoix.nil? then
+      begin
+        raise "WARNING ! Vous n'avez pas allumé superCollider ! \n On l'allume pour vous, porc"
+      rescue
+        self.demarrer
+      end
+    end
+      
     voix.each do |voix|
       p voix.to_s
       if voix==:all then
@@ -116,7 +126,7 @@ class SC
         rescue
           puts " vous ne pouvez appeler une voix \"all\", renommez-la'"
         end
-      elsif @@listeVoix[voix.to_s].nil? then
+      elsif @@listeVoix[voix.to_s].nil?  then
         @@listeVoix[voix.to_s]=Voix.new options
       else
         @@listeVoix[voix.to_s].set options
