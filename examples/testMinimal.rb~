@@ -1,0 +1,9 @@
+p "enclenchage de la machine"
+
+SC.demarrer
+
+sleep (2)
+
+p "chargement d'un fichier"
+
+
