@@ -7,7 +7,7 @@ class Voix
   attr_reader :dur, :degree, :octave, :root, :scale, :amp, :instrument
   
   def initialize options={}
-   
+    
     @root=nil
     
     self.setDuree options["dur"]
@@ -45,16 +45,32 @@ class Voix
 
   end
   
+  def set options
+    options.each do |key, value|
+      if value.is_a? Symbol
+        value=value.to_s
+      end
+      
+      case key
+      when "dur"
+        self.setDuree value
+      else
+        self.instance_variable_set "@#{key}", value
+      end
+    end
+  end
+  
+  
   def setDuree duree
     if duree.nil?
       then @dur=[4, [1]] ## valeur de base, tout en ronde, cantus
-                         ## firmus style, io!
+      ## firmus style, io!
     else
       if duree.is_a? Array 
         if duree.length == 2 and duree[1].is_a? Array
           then
           @dur=duree ## quelqu'un a fait un vrai objet en RTM
-                              ## notation
+          ## notation
         else
           tmp = true 
           duree.each {
@@ -64,8 +80,8 @@ class Voix
             end
           }
           if tmp then
-            @dur = [4, duree]  ## on a juste mis un rythme pour
-            ## la durée d'une mesure
+            @dur = [4, duree]  ## on a juste mis un rythme pour la
+            ## durée d'une mesure
           else
             begin 
               raise ArgumentError
@@ -77,14 +93,5 @@ class Voix
     end
   end
   
-  def set options
-    options.each do |key, value|
-      if value.is_a? Symbol
-        self.instance_variable_set "@#{key}", value.to_s
-      else
-        self.instance_variable_set "@#{key}", value
-      end
-    end
-  end    
-
 end
+

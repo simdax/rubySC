@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "activesupport", "~>4.0"
   spec.add_runtime_dependency "osc-ruby", "~> 1.1"
+  spec.add_runtime_dependency "eventmachine", "~> 1"
 
 
 end

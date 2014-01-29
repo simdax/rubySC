@@ -56,18 +56,22 @@ snd = Pluck.ar(
     Out.ar(0, [snd, snd]);
 }).add;
 
-///////// Ligne de fin pour mettre le bouzin en route
+///////// Lignes de fin pour mettre le bouzin en route
 
 s.boot;
 NetAddr.langPort.postln;
 
+m=NetAddr("127.0.0.1", 3333);
+m.sendMsg("/portSC", NetAddr.langPort);
+
 OSCFunc.newMatching(
     { |message, time, addr, responder|
-       //"caca".post;
 		message[1].asString.interpret
     }, "/SC", n
-);
+)
 
-
-m=NetAddr("127.0.0.1", NetAddr.langPort);
-m.sendMsg("SC", "iop")
+///// Vous pouvez ajouter de nouveaux instruments en mettant du code en-dessous, dans la syntaxe:
+/// SynthDef ("nomInstr", { argumentsModifiables }
+/// son = code
+/// Out.ar(son)
+/// }).add

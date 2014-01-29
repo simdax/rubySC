@@ -6,6 +6,7 @@ require_relative "rubySC/musique.rb"
 require 'active_support'
 require 'singleton'
 require 'osc-ruby'
+require 'osc-ruby/em_server'
 include ObjectSpace
 
 ## classe principale, singleton
@@ -18,7 +19,6 @@ include ObjectSpace
 class SC
 
   cattr_reader :listeVoix
-  
   include Singleton
 
   # ouvre le contact avec SuperCollider
@@ -26,22 +26,32 @@ class SC
   def self.demarrer
 
     ## démarre SuperCollider
-    #TODO : faire quelque chose d'un peu plus propre
 
-    unless p `ps -ef | grep "sclang" | grep -v "grep" | wc -l`.to_i > 0
-      system "sclang -u 57320 #{File.join(File.dirname(__FILE__), "init.sc")} &"
+    if `which sclang` == "" then
+      begin
+        raise Error
+      rescue
+        exit
+      end
     end
+      
+    @@portSuperCollider=1111 ## par défaut
+    @@server= OSC::EMServer.new 3333
+    @@server.add_method "/portSC" do |message|
+      @@portSuperCollider=message.to_a[0]
+      p @@portSuperCollider
+    end
+ 
+    unless p `ps -ef | grep "sclang" | grep -v "grep" | wc -l`.to_i > 0
+      system "sclang  #{File.join(File.dirname(__FILE__), "init.sc")} &"
+    end
+    sleep 0.5
+    Thread.new do @@server.run end
+    ## récupèrer l'adresse du port
 
-    ##  TODO : En théorie, récupèrer l'adresse du port, surtout si une autre instance de
-    ## SuperCollider existe...
-    
-    # @server= OSC::EMServer.new 3333
-    # @server.add_method '/portSuperCollider' do |message|
-    #   @portSuperCollider=message.message
-    # end
-    @postMan= OSC::Client.new "localhost", 57320 ## @portSuperCollider
+    @@postMan= OSC::Client.new "localhost", @@portSuperCollider
 
-    # variables et méthodes d'utilisation
+    # variables et méthodes de fin
     
     @@listeVoix=Hash.new
     define_finalizer(self, Proc.new {self.quit})
@@ -60,18 +70,10 @@ class SC
   # ajustages directs. À ne pas utiliser normalement.
 
   def self.send message
-    @postMan.send OSC::Message.new "/SC", message.to_s
+    @@postMan.send OSC::Message.new "/SC", message.to_s
   end
 
   ## fonction semi-privée
-
-  def self.updateScore
-    @@listeVoix.each do |key, value|
-      value.instance_variables.each do |variable|
-        self.updater key, variable[1..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
-      end
-    end
-  end
 
   def self.updater voix, arg, value
     case arg
@@ -88,11 +90,19 @@ class SC
     end
   end
 
+  def self.updateScore
+    @@listeVoix.each do |key, value|
+      value.instance_variables.each do |variable|
+        self.updater key, variable[1..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
+      end
+    end
+  end
+
   # fonctions principales 
   
   public
   
-  def self.set options=nil, *voix
+  def self.set demarreBool, options=nil, *voix
 
     if voix.nil?
       begin
@@ -101,12 +111,15 @@ class SC
         puts "vous devez donner un nom à votre (vos) voix"
       end
     end
-
     if @@listeVoix.nil? then
       begin
         raise "WARNING ! Vous n'avez pas allumé superCollider ! \n On l'allume pour vous, porc"
+        sleep 2
       rescue
         self.demarrer
+        sleep 3
+        p "et voilà..."
+        self.set demarreBool, options, voix
       end
     end
       
@@ -124,7 +137,8 @@ class SC
         @@listeVoix[voix.to_s].set options
       end
       self.updateScore   
-      self.play voix.to_s
+      if demarreBool then
+        self.play voix.to_s end
     end
   end
     
