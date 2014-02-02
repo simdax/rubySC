@@ -13,7 +13,7 @@ class Voix
     self.setDuree options["dur"]
     
     if options["degree"].nil?
-      then @degree=Array.new(rand(6)) do |x| x=rand(12) end
+      then @degree=Array.new(rand(1..20)) do |x| x=rand(12) end
     else
       @degree=options["degree"]
     end

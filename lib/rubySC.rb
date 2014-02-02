@@ -18,7 +18,7 @@ include ObjectSpace
 
 class SC
 
-  cattr_reader :listeVoix
+  cattr_reader :listeVoix, :portSuperCollider
   include Singleton
 
   # ouvre le contact avec SuperCollider
@@ -29,28 +29,34 @@ class SC
 
     if `which sclang` == "" then
       begin
-        raise Error
+        raise SystemExit
       rescue
         exit
       end
     end
       
-    @@portSuperCollider=1111 ## par défaut
     @@server= OSC::EMServer.new 3333
     @@server.add_method "/portSC" do |message|
       @@portSuperCollider=message.to_a[0]
-      p @@portSuperCollider
     end
  
     unless p `ps -ef | grep "sclang" | grep -v "grep" | wc -l`.to_i > 0
       system "sclang  #{File.join(File.dirname(__FILE__), "init.sc")} &"
     end
-    sleep 0.5
+
     Thread.new do @@server.run end
+    sleep 1.5
     ## récupèrer l'adresse du port
 
+    if @@portSuperCollider.nil?
+      begin
+        raise Error, "espece de porc"
+      rescue exit
+      end
+    end
+    
     @@postMan= OSC::Client.new "localhost", @@portSuperCollider
-
+    
     # variables et méthodes de fin
     
     @@listeVoix=Hash.new
@@ -58,10 +64,8 @@ class SC
     
   end
 
-  ##TODO : trouver une manuère plus propre de quitter SuperCollider,
-  ##Jack a toujours l'air de se vexer...
   def self.quit
-    `killall scsynth sclang`
+    `killall sclang scsynth`
   end
 
 
@@ -113,13 +117,9 @@ class SC
     end
     if @@listeVoix.nil? then
       begin
-        raise "WARNING ! Vous n'avez pas allumé superCollider ! \n On l'allume pour vous, porc"
-        sleep 2
+        raise ScriptError
       rescue
         self.demarrer
-        sleep 3
-        p "et voilà..."
-        self.set demarreBool, options, voix
       end
     end
       

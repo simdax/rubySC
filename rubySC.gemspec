@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["simdax"]
   spec.email         = ["simoncornaz@gmail.com"]
   spec.summary       = %q{light music live_coding lib}
-  spec.description   = %q{}
+  spec.description   = %q{simple library to create easily music in ruby. You can consider this lib as an interface for SuperCollider's JTLIB, with extras}
   spec.homepage      = "http://github.com/simdax/rubySC"
   spec.license       = "MIT"
 

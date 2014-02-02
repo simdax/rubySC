@@ -4,25 +4,30 @@ require 'json'
 
 ## fonctions de plus haut niveau
 
-## Quelques constantes, notamment pour les rythmes, c'est toujours
-## plus pratique
 
-## Je n'ai mis que les rythmes qui me semblaient
-  ## les plus connus
+## Rythmes à 4 notes
 
 
-  ## Rythmes à 3 notes
 
-  Pavanne=[2,1,1]
-
-  Sicilienne=[3,1,2]
-  Chabada=[3,2,1]
-
-  Tresillo=[3,3,2]
-  Syncopette=[1,2,1]
-
-  ## Rythmes à 4 notes
+module SoundFile 
   
+  def  self.charger fileName, departBool=true, tpsDattente=0.1
+    SC.send %Q{b=Buffer.read(s,'#{fileName}')}
+    if departBool
+	sleep tpsDattente
+      self.play
+    end
+  end
+  
+  def self.play
+    SC.send "b.play"
+  end
+
+  def self.pause
+
+  end
+end
+
 ## module utiliser pour faire des choses au niveau de toutes les voix.
 
 module Partition
@@ -32,18 +37,18 @@ module Partition
   ##  ----- voix
   ##  ----- paramDeVoix
 
-  def self.importer nomFichierJSON
+  def self.importer nomFichierJSON, jouerBool=false
     
     data = JSON.load File.open(nomFichierJSON)
     data.each do |k, v|
-      SC.set v, k
+      SC.set jouerBool, v, k
     end
 
   end
 
   def self.echelle echelle
     SC.listeVoix.each_key do |voix|
-      SC.set ({:scale => echelle}), voix
+      SC.set true, ({"scale" => echelle}), voix
     end
     SC.updateScore
   end
@@ -51,7 +56,7 @@ module Partition
 
   def self.transpose intervalle
     SC.listeVoix.each_key do |voix|
-      SC.set ({:root => intervalle}), voix
+      SC.set true, ({"root" => intervalle}), voix
     end
     self.updateScore
   end
@@ -73,7 +78,7 @@ module Marche
     else  
       begin
         raise ArgumentException
-        rescue
+      rescue
       end
     end
     tmp= Array.new(nbFois) do |x|
@@ -87,23 +92,40 @@ end
 
 module Rythme
 
+  ## Quelques constantes, notamment pour les rythmes, c'est toujours
+  ## plus pratique
+
+  ## Je n'ai mis que les rythmes qui me semblaient
+  ## les plus connus
+
+
+  ## Rythmes à 3 notes
+
+  Pavanne=[2,1,1]
+
+  Sicilienne=[3,1,2]
+  Chabada=[3,2,1]
+
+  Tresillo=[3,3,2]
+  Syncopette=[1,2,1]
+
   ## s'occupe du premier chiffre de la propriété "dur", c-à-d la vitesse
   def self.mesure mesure, *voix
     voix.each do |v|
-      tmp = SC.listeVoix[v].dur
+      tmp = SC.listeVoix[v.to_s].dur
       tmp[0] = mesure
-    SC.set ({ "dur" => tmp }), v
+      SC.set true, ({ "dur" => tmp }), v
     end
   end
-    
+  
   ## s'occupe du deuxième chiffre de la propriété "dur", c-à-d la
   ## gestalt rythmique. 
   
   def self.formule formule, *voix
     voix.each do |v|
-      tmp = SC.listeVoix[v].dur
+      tmp = SC.listeVoix[v.to_s].dur
       tmp[1] = formule
-      SC.set ({ "dur" => tmp }), v
+      SC.set true, ({ "dur" => tmp }), v
     end
   end
 

@@ -59,7 +59,6 @@ snd = Pluck.ar(
 ///////// Lignes de fin pour mettre le bouzin en route
 
 s.boot;
-NetAddr.langPort.postln;
 
 m=NetAddr("127.0.0.1", 3333);
 m.sendMsg("/portSC", NetAddr.langPort);
@@ -74,4 +73,4 @@ OSCFunc.newMatching(
 /// SynthDef ("nomInstr", { argumentsModifiables }
 /// son = code
 /// Out.ar(son)
-/// }).add
+/// })
