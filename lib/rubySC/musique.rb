@@ -3,18 +3,39 @@
 require 'json'
 
 ## fonctions de plus haut niveau
+module RubySC_CONST
+
+  ## Quelques constantes, notamment pour les rythmes, c'est toujours
+  ## plus pratique
+
+  ## Je n'ai mis que les rythmes qui me semblaient
+  ## les plus connus
 
 
-## Rythmes à 4 notes
+  ## Rythmes à 3 notes
 
+  Pavanne=[2,1,1]
+  Syncopette=[1,2,1]
 
+  Sicilienne=[3,1,2]
+  Chabada=[3,2,1]
+
+  Tresillo=[3,3,2]
+
+#########
+
+# Pour les accords
+
+  AccordMaj=[[0,4,7]]
+  
+end
 
 module SoundFile 
   
-  def  self.charger fileName, departBool=true, tpsDattente=0.1
+  def  self.charger fileName, departBool=true, tpsDattente=0.05
     SC.send %Q{b=Buffer.read(s,'#{fileName}')}
     if departBool
-	sleep tpsDattente
+      sleep tpsDattente
       self.play
     end
   end
@@ -24,7 +45,7 @@ module SoundFile
   end
 
   def self.pause
-
+    SC.send "b.pause"
   end
 end
 
@@ -65,49 +86,55 @@ end
 
 ## module pour gérer des marches.
 
-
-module Marche 
+module Marche
   
-  def self.diatonique voixOuMelodie, nbFois, intervalle
-    if voixOuMelodie.is_a? String 
-      melodie=SC.listeVoix[voixOuMelodie.to_s].degree
-      voix=voixOuMelodie
-    elsif voixOuMelodie.is_a? Array
-      melodie=voixOuMelodie
-      voix=rand(50).to_s ## le super truc porkasse !!
-    else  
-      begin
-        raise ArgumentException
-      rescue
-      end
-    end
-    tmp= Array.new(nbFois) do |x|
-      "Pseq(#{melodie.map { |note| note+intervalle*x }})"
-    end
-    tmp.delete("\"")
-    SC.set ({"degree" => "[#{tmp.join ","}]"}), voix
+  def self.marcheChromatique  intervalles, voix
+    
+    nbFois=SC.listeVoix[voix].degree.length
+    SC.set true, ({"root" => "Pstutter(#{nbFois}, Pseq(#{intervalles}, inf))"}), voix
+    
   end
 
+  def self.marcheDiatonique voix, intervalle
+
+    melodie=SC.listeVoix[voix].degree
+
+    tmp= Array.new(intervalle.size) do |x|
+      t=melodie.map { |note|        
+        if note.is_a? Array then          
+          note.map do |y| y+intervalle[x] end
+        else 
+          note+intervalle[x]*x 
+        end }
+      "Pseq(#{t})"
+    end
+    
+    SC.updater voix, "degree", "[#{tmp.join(',')}]"
+    SC.listeVoix[voix].information="en marche ! ..."
+    
+  end
+end
+
+module Echelle
+  
+  def self.determineEchelle voix
+    
+    ## fonction lente à cause d'un comportement étrange de Super Collider pour donner les valeurs de Scale..
+
+    echelleVoix="Scale."+SC.listeVoix[voix].scale
+    longueurEchelle=SC.ask("#{echelleVoix+".semitones.size"}")[0]
+    
+    valeursEchelles= Array.new(longueurEchelle) do |x|
+      x =  SC.ask("#{echelleVoix+".semitones[#{x}]"}")[0]
+    end
+
+    p valeursEchelles
+    
+  end
+  
 end
 
 module Rythme
-
-  ## Quelques constantes, notamment pour les rythmes, c'est toujours
-  ## plus pratique
-
-  ## Je n'ai mis que les rythmes qui me semblaient
-  ## les plus connus
-
-
-  ## Rythmes à 3 notes
-
-  Pavanne=[2,1,1]
-
-  Sicilienne=[3,1,2]
-  Chabada=[3,2,1]
-
-  Tresillo=[3,3,2]
-  Syncopette=[1,2,1]
 
   ## s'occupe du premier chiffre de la propriété "dur", c-à-d la vitesse
   def self.mesure mesure, *voix
@@ -131,3 +158,4 @@ module Rythme
 
 
 end
+

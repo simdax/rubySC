@@ -5,11 +5,18 @@
 class Voix
 
   attr_reader :dur, :degree, :octave, :root, :scale, :amp, :instrument
+  attr_accessor :information
   
   def initialize options={}
     
-    @root=nil
-    
+    @information=nil ## cette information sert juste à stocker tout ce
+                     ## qui pourrait être utile, principalement dans
+                     ## les Marches et autres transformations de
+                     ## mélodie. Cette variable ne sert qu'à donner
+                     ## une indication
+
+
+ 
     self.setDuree options["dur"]
     
     if options["degree"].nil?
@@ -32,7 +39,7 @@ class Voix
     end
 
     if options["amp"].nil?
-      then @amp = "Pwhite(0.2,0.5)"
+      then @amp = "Pwhite(0.2,0.8)"
     else
       @amp=options["amp"]
     end
@@ -42,6 +49,8 @@ class Voix
     else
       @instrument=options["instrument"].to_s
     end
+
+    self.setRoot options["root"]
 
   end
   
@@ -54,23 +63,31 @@ class Voix
       case key
       when "dur"
         self.setDuree value
+      when "root"
+        self.setRoot value
       else
         self.instance_variable_set "@#{key}", value
       end
     end
   end
   
+  def setRoot intervalles
+    if intervalles.nil?
+      @root=0
+    else
+      @root="Pstutter(#{self.degree.size}, Pseq(#{intervalles}, inf))"
+    end
+  end
   
   def setDuree duree
     if duree.nil?
       then @dur=[4, [1]] ## valeur de base, tout en ronde, cantus
-      ## firmus style, io!
+                         ## firmus style, io!
     else
       if duree.is_a? Array 
         if duree.length == 2 and duree[1].is_a? Array
           then
-          @dur=duree ## quelqu'un a fait un vrai objet en RTM
-          ## notation
+          @dur=duree ## quelqu'un a fait un vrai objet en RTM notation
         else
           tmp = true 
           duree.each {
@@ -81,7 +98,7 @@ class Voix
           }
           if tmp then
             @dur = [4, duree]  ## on a juste mis un rythme pour la
-            ## durée d'une mesure
+                               ## durée d'une mesure
           else
             begin 
               raise ArgumentError

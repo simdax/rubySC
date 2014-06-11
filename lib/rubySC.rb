@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# -*- coding: utf-8 -*-
+
 require_relative "rubySC/voix.rb"
 require_relative "rubySC/musique.rb"
 
@@ -18,7 +20,10 @@ include ObjectSpace
 
 class SC
 
-  cattr_reader :listeVoix, :portSuperCollider
+
+  cattr_reader :listeVoix, :portSuperCollider, :valeurReceptrice
+  cattr_accessor :server
+
   include Singleton
 
   # ouvre le contact avec SuperCollider
@@ -26,6 +31,7 @@ class SC
   def self.demarrer
 
     ## démarre SuperCollider
+
 
     if `which sclang` == "" then
       begin
@@ -36,33 +42,35 @@ class SC
     end
       
     @@server= OSC::EMServer.new 3333
+
+
+     @@server.add_method "/coucou" do |message|
+       p "demande de valeur"
+       @@valeurReceptrice=message.to_a
+     end
+     
     @@server.add_method "/portSC" do |message|
       @@portSuperCollider=message.to_a[0]
     end
  
-    unless p `ps -ef | grep "sclang" | grep -v "grep" | wc -l`.to_i > 0
-      system "sclang  #{File.join(File.dirname(__FILE__), "init.sc")} &"
-    end
+#    unless p `ps -ef | grep "sclang" | grep -v "grep" | wc -l`.to_i > 0
+    system "sclang  #{File.join(File.dirname(__FILE__), "init.sc")} &"
+
 
     Thread.new do @@server.run end
     sleep 1.5
     ## récupèrer l'adresse du port
 
-    if @@portSuperCollider.nil?
-      begin
-        raise Error, "espece de porc"
-      rescue exit
-      end
-    end
-    
     @@postMan= OSC::Client.new "localhost", @@portSuperCollider
     
     # variables et méthodes de fin
+
     
     @@listeVoix=Hash.new
     define_finalizer(self, Proc.new {self.quit})
-    
+
   end
+
 
   def self.quit
     `killall sclang scsynth`
@@ -74,10 +82,21 @@ class SC
   # ajustages directs. À ne pas utiliser normalement.
 
   def self.send message
+
     @@postMan.send OSC::Message.new "/SC", message.to_s
   end
 
+   def self.ask valeurRequise, tpsAttente=0.5
+
+     Thread.new do @@server.run end
+     self.send %Q[m.sendMsg("/coucou", #{valeurRequise.delete("\"")})]
+     sleep tpsAttente
+     return @@valeurReceptrice
+
+   end    
+
   ## fonction semi-privée
+
 
   def self.updater voix, arg, value
     case arg
@@ -94,6 +113,7 @@ class SC
     end
   end
 
+
   def self.updateScore
     @@listeVoix.each do |key, value|
       value.instance_variables.each do |variable|
@@ -106,7 +126,7 @@ class SC
   
   public
   
-  def self.set demarreBool, options=nil, *voix
+  def self.set options=nil, demarreBool=true, *voix
 
     if voix.nil?
       begin
@@ -115,6 +135,7 @@ class SC
         puts "vous devez donner un nom à votre (vos) voix"
       end
     end
+
     if @@listeVoix.nil? then
       begin
         raise ScriptError
@@ -137,6 +158,7 @@ class SC
         @@listeVoix[voix.to_s].set options
       end
       self.updateScore   
+
       if demarreBool then
         self.play voix.to_s end
     end

@@ -56,6 +56,7 @@ snd = Pluck.ar(
     Out.ar(0, [snd, snd]);
 }).add;
 
+
 ///////// Lignes de fin pour mettre le bouzin en route
 
 s.boot;
@@ -67,8 +68,8 @@ OSCFunc.newMatching(
     { |message, time, addr, responder|
 		message[1].asString.interpret
     }, "/SC", n
-)
-
+);
+Scale.major.semitones.asArray
 ///// Vous pouvez ajouter de nouveaux instruments en mettant du code en-dessous, dans la syntaxe:
 /// SynthDef ("nomInstr", { argumentsModifiables }
 /// son = code

@@ -1,4 +1,6 @@
 require "rubySC"
+require 'colorize'
+
 
 p "enclenchage de la machine"
 
@@ -11,7 +13,9 @@ Partition.importer "score.json"
 p SC.listeVoix
 p SC.portSuperCollider
 
+p "normalement on devrait entendre du son".red
 
 sleep 3
+
 
 
