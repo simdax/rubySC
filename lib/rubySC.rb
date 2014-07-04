@@ -2,8 +2,8 @@
 
 # -*- coding: utf-8 -*-
 
-require_relative "rubySC/voix.rb"
-require_relative "rubySC/musique.rb"
+require_relative "lib/voix.rb"
+require_relative "lib/musique.rb"
 
 require 'active_support'
 require 'singleton'
@@ -48,24 +48,19 @@ class SC
        p "demande de valeur"
        @@valeurReceptrice=message.to_a
      end
-     
+ 
     @@server.add_method "/portSC" do |message|
       @@portSuperCollider=message.to_a[0]
     end
- 
+
 #    unless p `ps -ef | grep "sclang" | grep -v "grep" | wc -l`.to_i > 0
     system "sclang  #{File.join(File.dirname(__FILE__), "init.sc")} &"
-
-
     Thread.new do @@server.run end
     sleep 1.5
     ## récupèrer l'adresse du port
-
     @@postMan= OSC::Client.new "localhost", @@portSuperCollider
     
-    # variables et méthodes de fin
-
-    
+    # variables et méthodes de fin    
     @@listeVoix=Hash.new
     define_finalizer(self, Proc.new {self.quit})
 
@@ -82,12 +77,10 @@ class SC
   # ajustages directs. À ne pas utiliser normalement.
 
   def self.send message
-
     @@postMan.send OSC::Message.new "/SC", message.to_s
   end
 
    def self.ask valeurRequise, tpsAttente=0.5
-
      Thread.new do @@server.run end
      self.send %Q[m.sendMsg("/coucou", #{valeurRequise.delete("\"")})]
      sleep tpsAttente
@@ -117,7 +110,7 @@ class SC
   def self.updateScore
     @@listeVoix.each do |key, value|
       value.instance_variables.each do |variable|
-        self.updater key, variable[1..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
+        self.updater key, variable[0..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
       end
     end
   end
@@ -126,45 +119,6 @@ class SC
   
   public
   
-  def self.set options=nil, demarreBool=true, *voix
-
-    if voix.nil?
-      begin
-        raise ArgumentError
-      rescue
-        puts "vous devez donner un nom à votre (vos) voix"
-      end
-    end
-
-    if @@listeVoix.nil? then
-      begin
-        raise ScriptError
-      rescue
-        self.demarrer
-      end
-    end
-      
-    voix.each do |voix|
-      p voix.to_s
-      if voix==:all then
-        begin 
-          raise ArgumentError 
-        rescue
-          puts " vous ne pouvez appeler une voix \"all\", renommez-la'"
-        end
-      elsif @@listeVoix[voix.to_s].nil?  then
-        @@listeVoix[voix.to_s]=Voix.new options
-      else
-        @@listeVoix[voix.to_s].set options
-      end
-      self.updateScore   
-
-      if demarreBool then
-        self.play voix.to_s end
-    end
-  end
-    
-
   def self.play *args
     if args[0]==:all then
       args=@@listeVoix.keys
@@ -183,7 +137,6 @@ class SC
     end
   end
 
-
   def self.remove *args
     if args[0]==:all then
       args=@@listeVoix.keys
@@ -195,3 +148,5 @@ class SC
   end
   
 end
+
+SC.demarrer

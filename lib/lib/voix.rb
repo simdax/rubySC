@@ -2,13 +2,23 @@
 # sorte de classe privée pour garder en mémoire
 # ce qui se passe dans les 'voix'...
 
-class Voix
 
-  attr_reader :dur, :degree, :octave, :root, :scale, :amp, :instrument
+
+class Voix
   
-  def initialize options={}
-   
+
+
+  attr_reader :name, :dur, :degree, :octave, :root, :scale, :amp, :instrument
+  
+  def initialize  name, options={}
+ 
+    if name.nil?
+      p "veuillez nommer votre voix"
+      raise Error
+    end
+
     @root=nil
+    @name=name
     
     if options["dur"].nil?
       then @dur=[1, [1]]
@@ -47,8 +57,12 @@ class Voix
       @instrument=options["instrument"].to_s
     end
 
+    SC.listeVoix[@name]=self
+
   end
   
+
+
   def set options
     options.each do |key, value|
       if value.is_a? Symbol
@@ -58,5 +72,7 @@ class Voix
       end
     end
   end    
+
+ 
 
 end

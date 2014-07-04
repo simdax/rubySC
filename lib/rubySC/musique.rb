@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 require 'json'
+require 'yaml'
 
 ## fonctions de plus haut niveau
 module RubySC_CONST
@@ -58,9 +59,19 @@ module Partition
   ##  ----- voix
   ##  ----- paramDeVoix
 
-  def self.importer nomFichierJSON, jouerBool=false
+  def self.importerJSON nomFichierJSON, jouerBool=false
     
     data = JSON.load File.open(nomFichierJSON)
+    data.each do |k, v|
+      SC.set jouerBool, v, k
+    end
+
+  end
+
+
+  def self.importerYAML nomFichierYAML, jouerBool=false
+    
+    data = YAML.load File.open(nomFichierJSON)
     data.each do |k, v|
       SC.set jouerBool, v, k
     end
