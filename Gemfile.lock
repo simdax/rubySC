@@ -1,4 +1,13 @@
+PATH
+  remote: .
+  specs:
+    rubySC (0.4.0)
+      activesupport (~> 4.0)
+      eventmachine (~> 1)
+      osc-ruby (~> 1.1)
+
 GEM
+  remote: https://rubygems.org/
   remote: http://rubygems.org/
   specs:
     activesupport (4.0.2)
@@ -10,8 +19,10 @@ GEM
     addressable (2.3.5)
     atomic (1.1.14)
     builder (3.2.2)
+    colorize (0.7.3)
     descendants_tracker (0.0.3)
     docile (1.1.2)
+    eventmachine (1.0.3)
     faraday (0.8.9)
       multipart-post (~> 1.2.0)
     git (1.2.6)
@@ -53,8 +64,9 @@ GEM
       multi_json (~> 1.0)
       multi_xml (~> 0.5)
       rack (~> 1.2)
+    osc-ruby (1.1.1)
     rack (1.5.2)
-    rake (10.1.1)
+    rake (0.9.6)
     rdoc (3.12.2)
       json (~> 1.4)
     shoulda (3.5.0)
@@ -77,7 +89,10 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.0)
+  colorize
   jeweler (~> 2.0.0)
+  rake (~> 0)
   rdoc (~> 3.12)
+  rubySC!
   shoulda
   simplecov

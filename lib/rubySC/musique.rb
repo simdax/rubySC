@@ -28,11 +28,11 @@ module RubySC_CONST
 # Pour les accords
 
   AccordMaj=[[0,4,7]]
-  
+
 end
 
-module SoundFile 
-  
+module SoundFile
+
   def  self.charger fileName, departBool=true, tpsDattente=0.05
     SC.send %Q{b=Buffer.read(s,'#{fileName}')}
     if departBool
@@ -40,7 +40,7 @@ module SoundFile
       self.play
     end
   end
-  
+
   def self.play
     SC.send "b.play"
   end
@@ -60,7 +60,7 @@ module Partition
   ##  ----- paramDeVoix
 
   def self.importerJSON nomFichierJSON, jouerBool=false
-    
+
     data = JSON.load File.open(nomFichierJSON)
     data.each do |k, v|
       SC.set jouerBool, v, k
@@ -70,7 +70,7 @@ module Partition
 
 
   def self.importerYAML nomFichierYAML, jouerBool=false
-    
+
     data = YAML.load File.open(nomFichierJSON)
     data.each do |k, v|
       SC.set jouerBool, v, k
@@ -85,7 +85,6 @@ module Partition
     SC.updateScore
   end
 
-
   def self.transpose intervalle
     SC.listeVoix.each_key do |voix|
       SC.set true, ({"root" => intervalle}), voix
@@ -98,12 +97,13 @@ end
 ## module pour gérer des marches.
 
 module Marche
-  
+
   def self.marcheChromatique  intervalles, voix
-    
-    nbFois=SC.listeVoix[voix].degree.length
-    SC.set true, ({"root" => "Pstutter(#{nbFois}, Pseq(#{intervalles}, inf))"}), voix
-    
+
+    nbFois=SC.listeVoix[voix.name].degree.length
+    voix.setRoot ({"root" => "Pstutter(#{nbFois}, Pseq(#{intervalles}, inf))"})
+    SC.updateScore
+
   end
 
   def self.marcheDiatonique voix, intervalle
@@ -111,41 +111,45 @@ module Marche
     melodie=SC.listeVoix[voix].degree
 
     tmp= Array.new(intervalle.size) do |x|
-      t=melodie.map { |note|        
-        if note.is_a? Array then          
+      t=melodie.map { |note|
+        if note.is_a? Array then
           note.map do |y| y+intervalle[x] end
-        else 
-          note+intervalle[x]*x 
+        else
+          note+intervalle[x]*x
         end }
       "Pseq(#{t})"
     end
-    
+
     SC.updater voix, "degree", "[#{tmp.join(',')}]"
     SC.listeVoix[voix].information="en marche ! ..."
-    
+
   end
 end
 
 module Echelle
-  
+
   def self.determineEchelle voix
-    
+
     ## fonction lente à cause d'un comportement étrange de Super Collider pour donner les valeurs de Scale..
 
     echelleVoix="Scale."+SC.listeVoix[voix].scale
     longueurEchelle=SC.ask("#{echelleVoix+".semitones.size"}")[0]
-    
+
     valeursEchelles= Array.new(longueurEchelle) do |x|
       x =  SC.ask("#{echelleVoix+".semitones[#{x}]"}")[0]
     end
 
     p valeursEchelles
-    
+
   end
-  
+
 end
 
 module Rythme
+
+  def self.Tempo vitesse
+    SC.send "TempoClock.default.tempo = #{vitesse}"
+  end
 
   ## s'occupe du premier chiffre de la propriété "dur", c-à-d la vitesse
   def self.mesure mesure, *voix
@@ -155,10 +159,10 @@ module Rythme
       SC.set true, ({ "dur" => tmp }), v
     end
   end
-  
+
   ## s'occupe du deuxième chiffre de la propriété "dur", c-à-d la
-  ## gestalt rythmique. 
-  
+  ## gestalt rythmique.
+
   def self.formule formule, *voix
     voix.each do |v|
       tmp = SC.listeVoix[v.to_s].dur
@@ -167,6 +171,4 @@ module Rythme
     end
   end
 
-
 end
-

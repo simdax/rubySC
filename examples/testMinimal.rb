@@ -7,7 +7,7 @@ sleep 2
 
 p "discutation avec la machine"
 
-SC.ask "NetAdrr.langPort"
+SC.ask "NetAddr.langPort"
 
 sleep 2
 

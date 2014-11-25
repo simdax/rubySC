@@ -1,16 +1,13 @@
-gem colorize
-
-<<<<<<< HEAD
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in rubySC.gemspec
 gemspec
-=======
+
 source "http://rubygems.org"
 # Add dependencies required to use your gem here.
 # Example:
 #   gem "activesupport", ">= 2.3.5"
-
+gem "colorize"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 group :development do
@@ -20,5 +17,3 @@ group :development do
   gem "jeweler", "~> 2.0.0"
   gem "simplecov", ">= 0"
 end
-
->>>>>>> aff742cafef9b36d744548c85b04fe81943b7a2e
