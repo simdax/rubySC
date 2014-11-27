@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.gem
 *.rbc
 .bundle
@@ -16,7 +15,6 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
-=======
 test.json
 
 # rcov generated
@@ -68,4 +66,3 @@ pkg
 
 # For rubinius:
 #*.rbc
->>>>>>> aff742cafef9b36d744548c85b04fe81943b7a2e

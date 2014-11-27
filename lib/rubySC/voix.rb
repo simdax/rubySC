@@ -2,12 +2,9 @@
 # sorte de classe privée pour garder en mémoire
 # ce qui se passe dans les 'voix'...
 
-require  'colorize'
-
 class Voix
 
-  attr_reader :dur, :degree, :octave, :marche, :scale, :amp, :instrument, :name
-  attr_accessor :information
+  attr_accessor :information, :dur, :degree, :octave, :marche, :scale, :amp, :instrument, :name
 
   def initialize nom=nil, options={}
 
@@ -40,13 +37,11 @@ class Voix
       @octave=options["octave"]
     end
 
-
     if options["scale"].nil?
       then @scale = "major"
     else
       @scale=options["scale"]
     end
-
     if options["amp"].nil?
       then @amp = "Pwhite(0.2,0.8)"
     else
@@ -89,7 +84,7 @@ class Voix
     end
   end
 
-  def setDuree duree
+  def setDuree (duree)
 
    if duree.nil?
       then @dur=[4, [1]] ## valeur de base, tout en ronde, cantus

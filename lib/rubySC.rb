@@ -2,6 +2,8 @@
 
 require_relative "rubySC/voix.rb"
 require_relative "rubySC/musique.rb"
+require_relative "rubySC/melodie.rb"
+require_relative "rubySC/contrepoint.rb"
 
 require 'active_support'
 require 'singleton'
@@ -89,7 +91,7 @@ class SC
 
   ## fonction semi-privée
 
-  def self.updater voix, arg, value
+  def self.set voix, arg, value
     case arg
     when "dur"
       self.send "Pbindef (\\#{voix}, \\#{arg}, Pseq(#{value}.convertRhythm, inf))"
@@ -108,7 +110,7 @@ class SC
   def self.updateScore
     @@listeVoix.each do |key, value|
       value.instance_variables.each do |variable|
-        self.updater key, variable[1..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
+        self.set key, variable[1..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
       end
     end
   end

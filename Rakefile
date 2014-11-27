@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 require "bundler/gem_tasks"
-=======
 # encoding: utf-8
 
 require 'rubygems'
@@ -53,4 +51,3 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
->>>>>>> aff742cafef9b36d744548c85b04fe81943b7a2e
