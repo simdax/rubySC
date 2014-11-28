@@ -123,23 +123,14 @@ class SC
 
     SC.updateScore
 
-    args.each do |arg|
-    if arg.is_a? Voix
-      @@listeVoix[arg.name]=arg
-      self.updateScore
-      self.send "Pdef(\\#{arg.name}).play"
-    else
-      if arg==nil then
-        tmpargs=@@listeVoix.keys
-        tmpargs.each do |voix|
-            self.send "Pdef(\\#{voix.to_s}).play"
-          end
-      else
-        self.send "Pdef(\\#{arg.to_s}).play"
+    if args[0]==nil then
+      args=@@listeVoix.keys
+      args.each do |voix|
+        self.send "Pdef(\\#{voix.to_s}).play"
       end
     end
-    end
   end
+
 
   def self.stop *args
     if args[0]==nil then

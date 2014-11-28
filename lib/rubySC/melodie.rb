@@ -1,7 +1,7 @@
-def creerMelodie nbNote=rand(4..12)
+def creerMelodie nbNote=rand(10..30)
 
   Array.new (nbNote) do |note|
-    note=[0,0,1,2,3,3,4,4,5,6].sample
+    note=[0,0,1,1,2,3,3,3,3,4,4,4,4,5,6].sample   #manière un peu bourrine de "pondérer" les notes possibles
   end
 end
 
@@ -24,8 +24,8 @@ end
 def creerRythme melodie  #analyse
 
   rythme = intervallesMel melodie
-  rythme.map { |inter|
-    if inter.abs>1
+  rythme.map! { |inter|
+    if inter.abs > 1
       note= 2
     else
       note=1
