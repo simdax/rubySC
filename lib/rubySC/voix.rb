@@ -4,8 +4,8 @@
 
 class Voix
 
-  attr_accessor :information, :dur, :degree, :octave, :marche, :scale, :amp, :instrument, :name
-
+  attr_accessor :information, :degree, :octave, :marche, :scale, :amp, :instrument, :name
+  attr_reader :dur
   def initialize nom=nil, options={}
 
     @information=nil ## cette information sert juste à stocker tout ce
@@ -54,6 +54,9 @@ class Voix
       @instrument=options["instrument"].to_s
     end
 
+    if options[:dur]
+      self.setDuree options[:dur]
+    end
     self.setMarche options["marche"]
     SC.updateScore
 
@@ -114,6 +117,8 @@ class Voix
         end
       end
     end
+
+    SC.updateScore
   end
 
   def stop

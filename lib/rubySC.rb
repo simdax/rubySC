@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-require_relative "rubySC/voix.rb"
-require_relative "rubySC/musique.rb"
-require_relative "rubySC/melodie.rb"
-require_relative "rubySC/contrepoint.rb"
+Dir.glob("rubySC/**/*") { |file|
+
+ if File.file? file
+  require_relative file end
+}   
 
 require 'active_support'
 require 'singleton'
@@ -142,7 +143,7 @@ class SC
   end
 
   def self.remove *args
-    if args[0]==:all then
+    if args[0]==nil then
       args=@@listeVoix.keys
     end
     args.each do |voix|

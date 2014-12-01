@@ -1,12 +1,11 @@
 def consonnancesPossibles consonnances, noteM, noteH, ecartMax
 
-
 tmp=consonnances.reject	{|x|
 ((noteM+x) - noteH).abs > ecartMax
 } 
-p tmp
 
 if tmp==[] then
+	p "attention écart à la règle !"
 	tmp=consonnancesPossibles consonnances, noteM, noteH, ecartMax+1
 end	
 
@@ -14,7 +13,7 @@ return tmp
 end
 
 
-def harmoniser melodie, consonnances, ecartMax=2
+def harmoniser melodie, consonnances=[0,2,4,5], ecartMax=2
 
 	harmo=Array.new (melodie.size) 
 	harmo[0]=melodie[0]+consonnances.sample
@@ -24,6 +23,8 @@ def harmoniser melodie, consonnances, ecartMax=2
 
 	p "mel = #{melodie}"
 	p "harmo = #{harmo}"
+
+	return	harmo
 	
 end
 

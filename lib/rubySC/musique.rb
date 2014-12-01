@@ -11,17 +11,16 @@ module RubySC_CONST
 
   ## Je n'ai mis que les rythmes qui me semblaient
   ## les plus connus
-
+  Rythmes = []
 
   ## Rythmes à 3 notes
+  Rythmes <<  Pavanne=[2,1,1]
+  Rythmes << Syncopette=[1,2,1]
 
-  Pavanne=[2,1,1]
-  Syncopette=[1,2,1]
+  Rythmes << Sicilienne=[3,1,2]
+  Rythmes << Chabada=[3,2,1]
 
-  Sicilienne=[3,1,2]
-  Chabada=[3,2,1]
-
-  Tresillo=[3,3,2]
+  Rythmes << Tresillo=[3,3,2]
 
 #########
 
