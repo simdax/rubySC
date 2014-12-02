@@ -1,22 +1,56 @@
-rubySC est une petite biliothèque qui complète à sa manière
-[SCruby](https://github.com/maca/scruby) en offrant une interface avec
-la bibliothèque JTLib de SuperCollider, cette dernière étant tournée
-vers le live coding, et le scriptage de partition plus que la
-recherche acoustique _per se_.
+#Coucou M.A.Oistes fous !
+
+Vous avez carrément envie de faire de la grosse musique de bâtard ?
+
+Vous voulez créer vous-même cette grosse musique de bâtard, mais en même
+temps être un peu aidé par un logiciel non moins autant de bÂtard ?
+
+Mais ouais ! Vous êtes au bon endroit !
+
+![http://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg]
 
 ## Installation
 
-vous devez avoir installé supercollider. Pour l'instant, je n'ai testé
+Vous devez avoir installé [superCollider](http://supercollider.github.io/).
+
+### Intégrité morale
+
+`gem install rubySC `
+
+Pour l'instant, je n'ai testé
 le programme que sur linux, et l'appel au programme est fait par une
 bonne grosse commande 'system'
 
+Il y a un petit script "installation", qui peut peut-être être utile.
+
 ## Utilisation
 
-* Un objet "SC" s'occupe de l'interface OSC avec superCollider.
+RubySC est construit autour de deux idées
 
-`SC.demarrer`
+1.  rubySC complète à sa manière
+[SCruby](https://github.com/maca/scruby) en offrant une interface avec
+Super Collider à coup de gros d'appels OSC bien sales.
 
-* On ajoute des "voix", c'est-à-dire un mélange de 7 paramètres
+2. rubySC implémente la bibliothèque JTLib de SuperCollider, cette dernière étant tournée
+vers le 'scriptage de Patterns', aznoaz le _live coding_, agaga le scriptage de partition plus que la
+recherche acoustique _per se_.
+
+
+## Je veux faire de la musique !
+
+`require SC`
+
+qui créé sévéralz objets
+
+*SC qui gère le bouzin de manière global, et qu'on va laisser tranquille la plupart du temps
+
+`
+SC.listeVoix ## raccourci "l"
+SC.updateScore
+SC.play
+`
+
+* Des "voix", c'est-à-dire un mélange de 7 paramètres
 
   * instrument : regardez les noms des synthdef dans "init.sc" (ils proviennent tous de recherches sur [SCcode](http://sccode.org/))
   * dur : les rythmes de votre mélodie
@@ -26,11 +60,13 @@ bonne grosse commande 'system'
   * root : le micro-registre, utilisé pour faire des marches par exemple
   * scale : l'echelle utilisé pour votre mélodie
 
-`SC.set paramètre(hash), :nomVoix (ou "nomVoix")`
-plus précisément, avec "au clair de la lune" :
+##Mais c'est trop casse-couilles
 
-	` SC.set ({ :degree => [0,0,0,1,2,1,0,2,1,1,0], :dur => [1, [1, 1, 1 , 1 ,2 ,2 ,1 ,1 ,1 ,1 ,4]]}) , :superius
-	  SC.set ({ :degree => [[0, 2, 4], [0,3,5], [0,2,4], [1,3,4], [0,2,4], [1,3,4], [0,2,4]], :dur => [1, [2,2,2,2,2,2,4]])}, :basse`
+Exactly ! Alors on devient trianglement plus user-friendly !
+
+
+`Melodie.new ## génère une mélodie et un rythme grâce à un soupçon de magie
+
 
 On peut ensuite modifier ces voix
 

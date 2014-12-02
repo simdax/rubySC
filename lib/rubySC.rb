@@ -102,6 +102,11 @@ class SC
       self.send "Pbindef(\\#{voix}, \\#{arg}, Scale.#{value})"
     when "instrument"
       self.send "Pbindef(\\#{voix}, \\#{arg}, \\#{value})"
+    when "adsr"
+      self.send "Pbindef(\\#{voix}, \\atk, Pkey(\\dur)*#{value[0]})"
+      self.send "Pbindef(\\#{voix}, \\decay, Pkey(\\dur)*#{value[1]})"
+      self.send "Pbindef(\\#{voix}, \\sustain, Pkey(\\dur)*#{value[2]})"
+      self.send "Pbindef(\\#{voix}, \\rel, Pkey(\\dur)*#{value[3]})"
     else
       #self.send "Pbindef(\\#{voix}, \\#{arg}, #{value.to_s})"
     end
@@ -116,6 +121,12 @@ class SC
     end
   end
 
+def self.sample nomSample
+
+  tmp="samples/#{nomSample}.wav"
+  self.send "Buffer.read(s, \"#{tmp}\")"
+  
+end
   # fonctions principales
 
   public
@@ -155,3 +166,17 @@ class SC
 end
 
 SC.demarrer
+
+## quelques helpers
+
+def a numero=1
+  SC.listeVoix["melodie#{numero}"]
+end
+
+def h numero=1
+  SC.listeVoix["harmonisationDemelodie#{numero}"]
+end
+
+def list
+  SC.listeVoix
+end

@@ -9,12 +9,12 @@ def initialize
 end
   
   def mettreVoix instrument="default"
+    p "instrument sera #{instrument}"
     @@nbMel+=1
     Voix.new "melodie#{@@nbMel}", 
     ({:instrument => instrument, 
       :degree => @dessinMelodique,
       :dur => @dessinRythmique})
-
   end
 
 end

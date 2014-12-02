@@ -1,5 +1,35 @@
 //////////dictionnaire d'instruments
 
+///// Vous pouvez ajouter de nouveaux instruments en mettant du code en-dessous, dans la syntaxe:
+/// SynthDef ("nomInstr", { argumentsModifiables }
+/// son = code
+/// Out.ar(son)
+/// })
+
+
+//synth muy important
+
+SynthDef(\sampler, { |out, bufnum, freq = 1, amp = 1, atk, decay, sustain, rel|
+    var  sig, env;
+	//env=EnvGen.kr(Env.adsr(atk, decay, sustain, rel, amp));
+	env= EnvGen.kr(Env.linen(atk,sustain, rel, amp), doneAction:2);
+	sig = PlayBuf.ar(1, bufnum, rate: freq/1000, doneAction: 2) * env;
+    Out.ar(out, sig ! 2)
+}).add;
+
+
+SynthDef(\bell, { |out, accent = 0, amp = 0.1, decayScale = 1|
+    var    exc = PinkNoise.ar(amp)
+            * Decay2.kr(Impulse.kr(0), 0.01, 0.05),
+        sig = Klank.ar(`[
+            { ExpRand(400, 1600) } ! 4,
+            1 ! 4,
+            { ExpRand(0.1, 0.4) } ! 4
+        ], exc, freqscale: accent + 1, decayscale: decayScale);
+    DetectSilence.ar(sig, doneAction: 2);
+    Out.ar(out, sig ! 2)
+}).add;
+
 SynthDef(\sax, { |out, freq, amp=0.1, gate=1|
 	var num = 16;
 	var harms = Array.series(num, 1, 1) * Array.exprand(num, 0.995, 1.001);
@@ -69,9 +99,5 @@ OSCFunc.newMatching(
 		message[1].asString.interpret
     }, "/SC", n
 );
-Scale.major.semitones.asArray
-///// Vous pouvez ajouter de nouveaux instruments en mettant du code en-dessous, dans la syntaxe:
-/// SynthDef ("nomInstr", { argumentsModifiables }
-/// son = code
-/// Out.ar(son)
-/// })
+Scale.major.semitones.asArray;
+

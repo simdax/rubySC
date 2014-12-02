@@ -4,8 +4,8 @@
 
 class Voix
 
-  attr_accessor :information, :degree, :octave, :marche, :scale, :amp, :instrument, :name
-  attr_reader :dur
+  attr_accessor  :information, :degree, :octave, :marche, :scale, :amp, :instrument, :name
+  attr_reader :adsr, :dur
   def initialize nom=nil, options={}
 
     @information=nil ## cette information sert juste à stocker tout ce
@@ -23,7 +23,15 @@ class Voix
 
     SC.listeVoix[@name]=self
 
-    self.setDuree options["dur"]
+    @information="en pause \n"
+    self.setDuree options[:dur]
+
+    @adsr=[]
+    if options[:adsr].nil?
+      then self.setADSR 10,1,0.2,4
+      else  
+      @adsr=options[:adsr]      
+    end
 
     if options[:degree].nil?
       then @degree=Array.new(rand(1..5)) do |x| x=rand(12) end
@@ -31,61 +39,63 @@ class Voix
       @degree=options[:degree]
     end
 
-    if options["octave"].nil?
+    if options[:octave].nil?
       then @octave=4
     else
-      @octave=options["octave"]
+      @octave=options[:octave]
     end
 
-    if options["scale"].nil?
+    if options[:scale].nil?
       then @scale = "major"
     else
-      @scale=options["scale"]
+      @scale=options[:scale]
     end
-    if options["amp"].nil?
+    if options[:amp].nil?
       then @amp = "Pwhite(0.2,0.8)"
     else
-      @amp=options["amp"]
+      @amp=options[:amp]
     end
 
-    if options["instrument"].nil?
+    if options[:instrument].nil?
       then @instrument = "default"
     else
-      @instrument=options["instrument"].to_s
+     self.setInstrument options[:instrument]
     end
 
     if options[:dur]
       self.setDuree options[:dur]
     end
-    self.setMarche options["marche"]
+
     SC.updateScore
 
   end
 
-  def set options
-    options.each do |key, value|
-      if value.is_a? Symbol
-        value=value.to_s
-      end
-      case key
-      when "dur"
-        self.setDuree value
-      when "marche"
-        self.setMarche value
-      else
-        self.instance_variable_set "@#{key}", value
-      end
-    end
+
+  def setADSR atk, dec, sus, rel
+  
+    @adsr=[(1.0/atk), (1.0/dec), (1.0/sus), (1.0/rel)]
     SC.updateScore
+
   end
 
-  def setMarche intervalles
-    if intervalles.nil?
-      @root=0
-    else
-      @root="Pstutter(#{self.degree.size}, Pseq(#{intervalles}, inf))"
-    end
+  def setInstrument instrument
+
+    if instrument.is_a? Symbol  
+    @information = "le sample utilisé actuellement est #{instrument} \n"
+    SC.sample instrument.to_s
+    @instrument="sampler"
+    end 
+  
   end
+
+
+  # def setMarche intervalles
+  #   if intervalles.nil?
+  #     @root=0
+  #   else
+  #     @root="Pstutter(#{self.degree.size}, Pseq(#{intervalles}, inf))"
+  #   end
+  # end
 
   def setDuree (duree)
 
@@ -127,9 +137,9 @@ class Voix
   end
 
   def play
+    SC.updateScore
     SC.play @name
-    @information="en train de jouer".colorize (:blue)
-
+    @information="en train de jouer"
   end
 
 end
