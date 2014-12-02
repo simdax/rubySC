@@ -7,21 +7,21 @@ temps être un peu aidé par un logiciel non moins autant de bÂtard ?
 
 Mais ouais ! Vous êtes au bon endroit !
 
-![http://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg]
+![](http://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg)
 
 ## Installation
 
-Vous devez avoir installé [superCollider](http://supercollider.github.io/).
+Vous devez avoir installé [SuperCollider](http://supercollider.github.io/).
 
 ### Intégrité morale
 
-`gem install rubySC `
+```gem install rubySC ```
 
 Pour l'instant, je n'ai testé
 le programme que sur linux, et l'appel au programme est fait par une
 bonne grosse commande 'system'
 
-Il y a un petit script "installation", qui peut peut-être être utile.
+Il y a un petit script "installation", qui __peut peut-être être__ utile (bim, port-salut).
 
 ## Utilisation
 
@@ -38,17 +38,18 @@ recherche acoustique _per se_.
 
 ## Je veux faire de la musique !
 
-`require SC`
+```ruby
+require SC```
 
 qui créé sévéralz objets
 
 *SC qui gère le bouzin de manière global, et qu'on va laisser tranquille la plupart du temps
 
-`
+```ruby
 SC.listeVoix ## raccourci "l"
 SC.updateScore
 SC.play
-`
+```
 
 * Des "voix", c'est-à-dire un mélange de 7 paramètres
 
@@ -60,34 +61,36 @@ SC.play
   * root : le micro-registre, utilisé pour faire des marches par exemple
   * scale : l'echelle utilisé pour votre mélodie
 
-##Mais c'est trop casse-couilles
+###Mais c'est trop casse-couilles
 
 Exactly ! Alors on devient trianglement plus user-friendly !
 
 
-`Melodie.new ## génère une mélodie et un rythme grâce à un soupçon de magie
+```ruby
+mel=Melodie.new ## génère une mélodie et un rythme grâce à un soupçon de magie
+```
+
+on balance ensuite cette Melodie dans le grand monde
+
+```ruby
+
+mel.mettreVoix :piano
+mel.setDuree [0,1,2,1,0]
+mel.setADSR
+
+##j'en passe et des meilleurs !
+```
 
 
-On peut ensuite modifier ces voix
 
-	`SC.set ({ :amp => 0.2, :instrument => :wobble, :
-
-* arrêter ou reprenez vos voix : 
-   
-   ` mu.stop :voixUn, :voixDeux ## arrête deux voix
-    mu.play :voixUn ## reprend voixUn
-    mu.remove :all  ## arrête tout et supprime les voix `
-
-Les voix sont stockées dans 'listeVoix'
-
-	SC.listeVoix.inspect
+### Mais yen a encore plus !
 
 * Deux modules stockent des fonctions plus intéressantes.
 
 	1. Partition, gère tout ce qui est transposition de masse
-	1. Marche, permet de transposer la mélodie d'une voix
-	   `Marche.diatonique :nomVoix, intervalleDeMarche, nbRepetitions`
-	   `Marche.diatonique :superius, 2, 2 ## deux marches par tierce ascendante`
+	1. Contrepoint, pour faire d'autres voix
+	1. Harmonie ## à venir
+	1. Rythme ## à venir
 
 * Vous pouvez essayer de rajouter des instruments dans "init.sc", ou
 bien en apprenant SuperCollider, ou bien en cherchant par vous-mêmes
@@ -95,9 +98,8 @@ des plugins sur le net.
 
 == 
 
+# Grosse conclusion ♡
 
 Copiez-le comme des gros gorets, qu'un truc un peu simple un jour
 surgisse de ce monde de fous de MAOistes qui veulent détruire le monde
 à force de complexitudinités...
-
->>>>>>> aff742cafef9b36d744548c85b04fe81943b7a2e
