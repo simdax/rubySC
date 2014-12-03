@@ -137,10 +137,11 @@ end
 
     if args[0]==nil then
       args=@@listeVoix.keys
-      args.each do |voix|
-        self.send "Pdef(\\#{voix.to_s}).play"
-      end
     end
+    args.each do |voix|
+    self.send "Pdef(\\#{voix.to_s}).play"
+    end
+    
   end
 
 
@@ -165,18 +166,24 @@ end
 
 end
 
-SC.demarrer
-
 ## quelques helpers
 
-def a numero=1
+def m numero=1
   SC.listeVoix["melodie#{numero}"]
 end
 
-def h numero=1
+def org numero=1
   SC.listeVoix["harmonisationDemelodie#{numero}"]
 end
 
-def list
+def h numero=0
+  SC.listeVoix["harmo#{numero}"]
+end
+
+def b
+SC.listeVoix["basse"]
+end
+
+def li
   SC.listeVoix
 end

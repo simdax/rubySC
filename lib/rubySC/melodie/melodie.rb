@@ -1,4 +1,8 @@
+require_relative "algos.rb"
+
 class Melodie
+
+include Intervalles
 
 attr_reader :dessinRythmique, :dessinMelodique
 
@@ -17,7 +21,26 @@ end
       :dur => @dessinRythmique})
   end
 
+#quelques raccourcis
+
+def interMel 
+  intervallesMel @dessinMelodique
 end
+
+def interAbs
+  intervallesAbs @dessinMelodique
+end
+
+def interRel note=0
+  intervallesMel @dessinMelodique, note
+end
+
+def doublon
+  detecterDoublons @dessinMelodique
+end
+
+end
+
 
 
 def creerMelodie nbNote=rand(10..30)

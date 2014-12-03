@@ -1,0 +1,11 @@
+
+load "rubySC.rb"
+
+SC.demarrer
+
+a=Melodie.new
+a.mettreVoix :piano
+
+ac=Accords.new grille:(Array.new (7) {rand (-7..7)})
+ac.play
+

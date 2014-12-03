@@ -28,9 +28,9 @@ class Voix
 
     @adsr=[]
     if options[:adsr].nil?
-      then self.setADSR 10,1,0.2,4
+      then self.setADSR 0.2,1,0.9,0.4
       else  
-      @adsr=options[:adsr]      
+      selfADSR options[:adsr]      
     end
 
     if options[:degree].nil?
@@ -58,6 +58,7 @@ class Voix
 
     if options[:instrument].nil?
       then @instrument = "default"
+      p "pan!"
     else
      self.setInstrument options[:instrument]
     end
@@ -73,7 +74,7 @@ class Voix
 
   def setADSR atk, dec, sus, rel
   
-    @adsr=[(1.0/atk), (1.0/dec), (1.0/sus), (1.0/rel)]
+    @adsr=[(atk/1.0), (dec/1.0), (sus/1.0), (rel/1.0)]
     SC.updateScore
 
   end
@@ -84,6 +85,8 @@ class Voix
     @information = "le sample utilisé actuellement est #{instrument} \n"
     SC.sample instrument.to_s
     @instrument="sampler"
+    else
+    @instrument=instrument
     end 
   
   end
