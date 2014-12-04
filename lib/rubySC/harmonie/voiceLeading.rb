@@ -1,4 +1,4 @@
-require_relative "../melodie/algos.rb"
+require_relative '../melodie/intervalles.rb'
 
 module VoiceLeading
 include Intervalles
@@ -35,7 +35,7 @@ include Intervalles
 
 def reduireGrille grille, grilleAnalyse=7
 	minMax = grilleAnalyse/2
-	(intervallesMel grille).map { |e| 
+	(intervalles grille).map { |e| 
 	e=e%grilleAnalyse
 	if e > minMax
 	e=-(grilleAnalyse%e)
@@ -45,6 +45,7 @@ def reduireGrille grille, grilleAnalyse=7
     end
 	}
 end
+
 
 def incrementer accord, vecteurHarmonique
 

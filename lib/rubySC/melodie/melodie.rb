@@ -1,30 +1,72 @@
-require_relative "algos.rb"
+require_relative 'intervalles.rb'
+require_relative  'motif.rb'
 
 class Melodie
 
 include Intervalles
+include Motif
 
-attr_reader :dessinRythmique, :dessinMelodique
+attr_reader :dessinRythmique, :dessinMelodique, :analyse
 
 def initialize
-  @dessinMelodique = creerMelodie
-  @dessinRythmique = creerRythme @dessinMelodique
-  @@nbMel=0
-end
   
-  def mettreVoix instrument="default"
-    p "instrument sera #{instrument}"
-    @@nbMel+=1
-    Voix.new "melodie#{@@nbMel}", 
-    ({:instrument => instrument, 
-      :degree => @dessinMelodique,
-      :dur => @dessinRythmique})
+  @@nbMel=0
+  @analyse={}
+
+  @dessinMelodique = creerMelodie
+  self.analyser
+  @dessinRythmique = self.creerRythme
+
+end
+
+
+def enclencher instrument="default"
+  p "instrument sera #{instrument}"
+  @@nbMel+=1
+  Voix.new "melodie#{@@nbMel}", 
+  ({:instrument => instrument, 
+    :degree => @dessinMelodique,
+    :dur => @dessinRythmique})
+end
+
+def analyser
+
+  @analyse["motifs"]=squeletteMotivique @dessinMelodique
+  @analyse["intervalles"]=squeletteIntervallique @dessinMelodique
+   
+end   
+
+
+  
+def creerRythme options={:intervalles=>1, :motifs=>1} 
+  
+  tmp=[]
+  l=lambda {|x|
+  unless options[x].nil? 
+    tmp<<@analyse[x.to_s].map(&options[x].method(:*))
+  end}
+ 
+  options.each { |k,v|
+  l.call k  }
+ 
+  result=[]
+  (@dessinMelodique.size-1).times do |i|
+  result << tmp.map{ |row| row[i] }.reduce(&:+)
   end
+
+  return result
+
+end
+
+def vitesse
+  
+end
+
 
 #quelques raccourcis
 
-def interMel 
-  intervallesMel @dessinMelodique
+def inter
+  intervalles @dessinMelodique
 end
 
 def interAbs
@@ -35,9 +77,14 @@ def interRel note=0
   intervallesMel @dessinMelodique, note
 end
 
-def doublon
-  detecterDoublons @dessinMelodique
+
+def detectDoublons 
+  @dessinMelodique.map.with_index(1) { |e, i| 
+    unless i==@dessinMelodique.size
+    @dessinMelodique[i] - @dessinMelodique[i-1] == 0 ? true : false
+    end }[0..-2]
 end
+
 
 end
 
@@ -54,82 +101,6 @@ def transpose melodie, deCombien
     melodie.map { |e| e+= deCombien }
 end
 
-def melodieCachee melUn, melDeux
-
-  i=0  
-    tmpDeux=melUn.map {|x| 
-      if x == melDeux[i] then i +=1 ; true 
-      else false
-      end 
-    }
-    p tmpDeux
-  
-    if tmpDeux.count(true) == melDeux.size 
-    then tmpDeux
-    else  nil end
-end
-
-#grand moment de désarroi algorithmique
-
-# def creerMelodie squeletteRythmique, urMelodie=["c","b","a","g","f","e","d","c"]
-
-
-# squeletteRythmique.last=3 #déjà ça c'est réglé
-# squeletteRythmique.reverse!
-
-# melodie=[]
-
-# notePrincipale
-# noteSecondaire
-# noteOrnementale
-
-
-# UnVersUn = lambda { noteOrnementale+=1}
-# UnVersDeux = lambda { |a| orner squeletteRythmique(a.index-noteOrnementale) }
-# UnVersTrois
-# DeuxversUn
-# DeuxVersDeux
-# DeuxVersTrois
-# TroisVersUn
-# TRoisVersDeux
-# TroisVErsTRois
-
-# niveauUn=squeletteRythmique.each_cons(2) { |a,b|
-#   case b
-#     when 1
-#       case a
-#         when 1
-#           UnVersUn.call
-#         when 2
-#           UnVersDeux.call
-#         when 3
-#           UnVersTrois.call
-#         end
-#     when 2
-#       case a
-#         when 1
-#           DeuxVersUn.call
-#         when 2
-#           DeuxVersDeux.call
-#         when 3
-#           DeuxVersTrois.call
-#         end
-#     when 3
-#     case a
-#         when 1
-#           TroisVersUn.call
-#         when 2
-#           TroisVersDeux.call
-#         when 3
-#           TroisVersTrois.call
-#   end
-
-
-
-# melodie.reverse!
-
-
-# end
 
 def rejoindre noteDepart, noteArrivee, nbTemps
 
@@ -169,32 +140,3 @@ trille = lambda { tmp= [note-1, note, note+1, note] }
   end
 
 end
-
-
-
-#analyse rythmique basique
-# si intervalle grand => pt d'appui
-# si note conjointes et/ou similaire => plus rapide
-#pour l'instant, pas de note d'approche
-
-
-def creerRythme melodie=nil  #analyse
-
-  if melodie.nil?
-  return  RubySC_CONST::Rythmes.sample
-  end
-
-  rythme = intervallesMel melodie
-  rythme.map! { |inter|
-    case inter.abs
-      when 1
-      note = 1
-
-    else
-      note=2
-    end
-  }
-  rythme << 4
-
-end
-

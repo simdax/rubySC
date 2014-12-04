@@ -7,7 +7,7 @@ temps être un peu aidé par un logiciel non moins autant de bÂtard ?
 
 Mais ouais ! Vous êtes au bon endroit !
 
-![](http://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg)
+![](http://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg =100x100)
 
 ## Installation
 
@@ -39,16 +39,19 @@ recherche acoustique _per se_.
 ## Je veux faire de la musique !
 
 ```ruby
-require SC```
+require SC
+```
 
 qui créé sévéralz objets
 
 *SC qui gère le bouzin de manière global, et qu'on va laisser tranquille la plupart du temps
 
 ```ruby
-SC.listeVoix ## raccourci "l"
+
+SC.listeVoix ## raccourci "li"
 SC.updateScore
 SC.play
+
 ```
 
 * Des "voix", c'est-à-dire un mélange de 7 paramètres
@@ -75,8 +78,8 @@ on balance ensuite cette Melodie dans le grand monde
 ```ruby
 
 mel.mettreVoix :piano
-mel.setDuree [0,1,2,1,0]
-mel.setADSR
+mel.setDuree [0,1,2,1,0] #si on est des bâtards
+mel.setADSR              #si on est des fous
 
 ##j'en passe et des meilleurs !
 ```
@@ -85,18 +88,20 @@ mel.setADSR
 
 ### Mais yen a encore plus !
 
-* Deux modules stockent des fonctions plus intéressantes.
+* Trois modules stockent des fonctions plus intéressantes.
 
-	1. Partition, gère tout ce qui est transposition de masse
-	1. Contrepoint, pour faire d'autres voix
-	1. Harmonie ## à venir
+	1. Partition, gère tout ce qui est phénomène de masse
+	1. Contrepoint, pour générer des voix à partir d'une cellule génératrice
+	1. Harmonie, pour faire des grosses suites d'accords géniales 
 	1. Rythme ## à venir
+
+## Des instruments de folie !
 
 * Vous pouvez essayer de rajouter des instruments dans "init.sc", ou
 bien en apprenant SuperCollider, ou bien en cherchant par vous-mêmes
 des plugins sur le net.
-
-== 
+* possibilität de jouer des samples pour avoir un vrai joli son et tout
+ 
 
 # Grosse conclusion ♡
 

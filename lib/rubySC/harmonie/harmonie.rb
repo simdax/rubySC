@@ -5,13 +5,15 @@ include Intervalles
 	def squeletteHarmonique mel, set=[0,2,4]
 
 		mel.map { |e| 
-		e == set.any? ? true : false }
+		set.any? {|x| e==x} ? true : false }
 	end
 
-	# Sert à détecter quel accord sous-tend une mélodie
+	# Sert à détecter les notes paires dans une section de
+	#mélodie. Retourne la distance qui sépare ces notes
+	#typiquement, un accord parfait sera {"0 (ou 1)" => [0,1,2]}
 	# @format melodie [Melodie]
 	
-	def detecterSet mel, intervalles=2
+	def detecterHarmonies mel, intervalles=2
 
 		tmpUn=mel.sort.uniq.map { |e|
 			e%intervalles
@@ -28,9 +30,6 @@ include Intervalles
 		return n
 	end
 
-	def detectSymetrie mel
-		
-	end
 
 	def analyse mel, grilleAnalyse=2, modulo=7
 
