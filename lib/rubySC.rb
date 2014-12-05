@@ -6,6 +6,8 @@ Dir.glob("rubySC/**/*") { |file|
   require_relative file end
 }   
 
+require 'set'
+
 require 'active_support'
 require 'singleton'
 require 'osc-ruby'
@@ -25,7 +27,7 @@ class SC
   cattr_reader :listeVoix, :valeurReceptrice
   cattr_accessor :server, :portSuperCollider
 
-  include Singleton
+  #include Singleton
 
   # ouvre le contact avec SuperCollider
 
@@ -166,6 +168,8 @@ end
 
 end
 
+
+module Helper
 ## quelques helpers
 
 def m numero=1
@@ -186,4 +190,6 @@ end
 
 def li
   SC.listeVoix
+end
+
 end
