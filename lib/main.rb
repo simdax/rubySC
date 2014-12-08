@@ -1,33 +1,26 @@
 #!/usr/bin/env ruby
 
 require 'Qt4'
+require 'pp'
 require_relative 'qt/form.rb'
 require_relative 'rubySC.rb'
+require_relative 'boutons.rb'
 
-marche=true
 
-    a = Qt::Application.new(ARGV)
-    u = Ui::Form.new
-    w = Qt::Widget.new
-    u.setupUi(w)
+	a = Qt::Application.new(ARGV)
+	u = Ui::Form.new
+	w = Qt::Widget.new
+	u.setupUi(w)
+	app=App.new u
 
-u.pushButton.connect(SIGNAL :clicked){
-	SC.play "melodie1"
-}
-u.pushButton_2.connect(SIGNAL :clicked){
-	SC.stop "melodie1"
-}
-u.verticalSlider.connect(SIGNAL ('valueChanged(int)')){
-	Rythme.tempo (u.verticalSlider.value/100)
-}
-u.pushButton_3.connect(SIGNAL :clicked) {
-	$qApp.quit
+Thread.new {
+	loop do
+	system 'clear'
+	pp SC.listeVoix
+	pp app.mel
+	sleep 0.5
+end
 }
 
-SC.demarrer
-melodie =Melodie.new
-melodie.enclencher :piano
-
-w.show
-a.exec
-
+	w.show
+	a.exec

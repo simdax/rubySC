@@ -35,7 +35,6 @@ class SC
 
     ## démarre SuperCollider
 
-
     if `which sclang` == "" then
       begin
         raise SystemExit
@@ -96,8 +95,10 @@ class SC
 
   def self.set voix, arg, value
     case arg
+    when "rythm"
+      self.send "Pbindef (\\#{voix}, \\dur, Pseq(#{value}.convertRhythm, inf))"
     when "dur"
-      self.send "Pbindef (\\#{voix}, \\#{arg}, Pseq(#{value}.convertRhythm, inf))"
+      self.send "Pbindef (\\#{voix}, \\dur, Pseq(#{value}.convertRhythm, inf))"
     when "degree"
       self.send "Pbindef(\\#{voix}, \\#{arg}, Pseq(#{value}, inf))"
     when "scale"
@@ -116,6 +117,7 @@ class SC
 
 
   def self.updateScore
+
     @@listeVoix.each do |key, value|
       value.instance_variables.each do |variable|
         self.set key, variable[1..-1], value.instance_variable_get(variable) unless value.instance_variable_get(variable).nil?
